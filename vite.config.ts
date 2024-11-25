@@ -56,4 +56,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    rollupOptions: {
+      external: ['/arabic-bible/src/main.tsx']
+    }
+  }
 });
