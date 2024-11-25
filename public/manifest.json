@@ -2,7 +2,7 @@
   "name": "الكتاب المقدس العربي",
   "short_name": "الكتاب المقدس",
   "description": "تطبيق الكتاب المقدس باللغة العربية",
-  "start_url": "/",
+  "start_url": "/arabic-bible/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2563eb",
