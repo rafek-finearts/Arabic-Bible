@@ -33,9 +33,8 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const highlightedVerseRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  
-  // State to track if we just scrolled to a specific verse
   const [hasScrolledToVerse, setHasScrolledToVerse] = useState(false);
+  const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handlers = useSwipeable({
     onSwipedRight: () => onNavigate('prev'),
@@ -44,8 +43,8 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
   });
 
   useEffect(() => {
-    if (contentRef.current) {
-      if (highlightedVerse && highlightedVerseRef.current && headerRef.current && !hasScrolledToVerse) {
+    if (contentRef.current && !hasScrolledToVerse) {
+      if (highlightedVerse && highlightedVerseRef.current && headerRef.current) {
         const headerHeight = headerRef.current.offsetHeight;
         const verseTop = highlightedVerseRef.current.offsetTop;
         contentRef.current.scrollTop = verseTop - headerHeight - 16; // Adjust for padding
@@ -58,8 +57,15 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
 
   const handleScroll = () => {
     if (contentRef.current) {
-      onScroll(contentRef.current.scrollTop); // Update scroll position
-      setHasScrolledToVerse(false); // Allow future scrolling
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      const timeout = setTimeout(() => {
+        if (contentRef.current && contentRef.current.scrollTop !== scrollPosition) {
+          onScroll(contentRef.current.scrollTop); // Update scroll position if it has changed
+        }
+      }, 1000);
+      setScrollTimeout(timeout);
     }
   };
 
@@ -122,4 +128,4 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
       </div>
     </div>
   );
-}
+};

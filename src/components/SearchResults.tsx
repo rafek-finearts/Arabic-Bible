@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { highlightSearchText } from '../utils/highlightText';
 
 interface SearchResult {
@@ -28,6 +28,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(null);
+  const lastScrollPosition = useRef<number>(scrollPosition);
+  const lastScrollTime = useRef<number>(Date.now());
 
   useEffect(() => {
     if (contentRef.current && contentRef.current.scrollTop !== scrollPosition) {
@@ -37,7 +40,19 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 
   const handleScroll = () => {
     if (contentRef.current) {
-      onScroll(contentRef.current.scrollTop);
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+      }
+      const timeout = setTimeout(() => {
+        const currentScrollPosition = contentRef.current.scrollTop;
+        const currentTime = Date.now();
+        if (currentScrollPosition !== lastScrollPosition.current && currentTime - lastScrollTime.current >= 1000) {
+          onScroll(currentScrollPosition); // Update scroll position if it has changed and 1 second has passed
+          lastScrollPosition.current = currentScrollPosition;
+          lastScrollTime.current = currentTime;
+        }
+      }, 1000);
+      setScrollTimeout(timeout);
     }
   };
 
