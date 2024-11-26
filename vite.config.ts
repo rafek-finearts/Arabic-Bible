@@ -16,8 +16,8 @@ export default defineConfig({
         theme_color: '#2563eb',
         background_color: '#ffffff',
         display: 'standalone',
-		start_url: '/arabic-bible/', // Ensure this matches your repository name scope: '/arabic-bible/', // Ensure this matches your repository name
-		scope: '/arabic-bible/', // Ensure this matches your repository name
+        start_url: '/arabic-bible/', // Ensure this matches your repository name scope: '/arabic-bible/', // Ensure this matches your repository name
+        scope: '/arabic-bible/', // Ensure this matches your repository name
         icons: [
           {
             src: './icons/icon-72x72.png',
