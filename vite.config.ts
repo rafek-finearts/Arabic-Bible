@@ -3,12 +3,12 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/arabic-bible/',
+  base: './',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*'],
+      includeAssets: ['favicon.ico', 'robots.txt', 'icons/*.png'],
       manifest: {
         name: 'الكتاب المقدس العربي',
         short_name: 'الكتاب المقدس',
@@ -16,8 +16,8 @@ export default defineConfig({
         theme_color: '#2563eb',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: './index.html',
-        scope: '.',
+        start_url: './',
+        scope: './',
         icons: [
           {
             src: './icons/icon-72x72.png',
