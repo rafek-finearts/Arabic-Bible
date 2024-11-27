@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'icons/*.png'],
+      includeAssets: ['icons/*'],
       strategies: 'generateSW',
       manifest: {
         name: 'الكتاب المقدس العربي',
