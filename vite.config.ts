@@ -7,9 +7,13 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      disable: process.env.NODE_ENV === 'development',
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*'],
-      strategies: 'generateSW',
+      includeAssets: ['icons/*.png'],
+      injectRegister: 'auto',
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'service-worker.ts',
       manifest: {
         name: 'الكتاب المقدس العربي',
         short_name: 'الكتاب المقدس',
@@ -41,8 +45,7 @@ export default defineConfig({
       workbox: {
         globPatterns: [
           '**/*.{js,css,html,ico,png,svg,woff2,json}',
-          'manifest.json',
-          'icons/*'
+          'icons/*.png'
         ],
         runtimeCaching: [
           {
