@@ -7,13 +7,9 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      disable: process.env.NODE_ENV === 'development',
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*.png'],
-      injectRegister: 'auto',
-      strategies: 'injectManifest',
-      srcDir: 'src',
-      filename: 'service-worker.ts',
+      includeAssets: ['icons/*'],
+      strategies: 'generateSW',
       manifest: {
         name: 'الكتاب المقدس العربي',
         short_name: 'الكتاب المقدس',
@@ -25,18 +21,18 @@ export default defineConfig({
         scope: './',
         icons: [
           {
-            src: 'icons/icon-144x144.png',
+            src: './icons/icon-144x144.png',
             sizes: '144x144',
             type: 'image/png'
           },
           {
-            src: 'icons/icon-192x192.png',
+            src: './icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: 'icons/icon-384x384.png',
+            src: './icons/icon-384x384.png',
             sizes: '384x384',
             type: 'image/png'
           }
@@ -45,7 +41,8 @@ export default defineConfig({
       workbox: {
         globPatterns: [
           '**/*.{js,css,html,ico,png,svg,woff2,json}',
-          'icons/*.png'
+          'manifest.json',
+          'icons/*'
         ],
         runtimeCaching: [
           {
