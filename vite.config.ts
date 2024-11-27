@@ -3,15 +3,13 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/',
+  base: '/arabic-bible/',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icons/*'],
-      strategies: 'injectManifest',
-      srcDir: 'src',
-      filename: 'service-worker.ts',
+      strategies: 'generateSW',
       manifest: {
         name: 'الكتاب المقدس العربي',
         short_name: 'الكتاب المقدس',
@@ -19,22 +17,22 @@ export default defineConfig({
         theme_color: '#2563eb',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: '/',
-        scope: '/',
+        start_url: '/arabic-bible/',
+        scope: '/arabic-bible/',
         icons: [
           {
-            src: '/icons/icon-144x144.png',
+            src: './icons/icon-144x144.png',
             sizes: '144x144',
             type: 'image/png'
           },
           {
-            src: '/icons/icon-192x192.png',
+            src: './icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/icons/icon-384x384.png',
+            src: './icons/icon-384x384.png',
             sizes: '384x384',
             type: 'image/png'
           }
@@ -76,7 +74,7 @@ export default defineConfig({
             }
           }
         ],
-        navigateFallback: '/index.html',
+        navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/api/],
         skipWaiting: true,
         clientsClaim: true
