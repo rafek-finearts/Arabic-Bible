@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*'],
+      includeAssets: ['./icons/*'],
       strategies: 'generateSW',
       manifest: {
         name: 'الكتاب المقدس العربي',
@@ -17,7 +17,7 @@ export default defineConfig({
         theme_color: '#2563eb',
         background_color: '#ffffff',
         display: 'standalone',
-        start_url: './',
+        start_url: './index.html',
         scope: './',
         icons: [
           {
@@ -99,7 +99,7 @@ export default defineConfig({
             }
           }
         ],
-        navigateFallback: 'index.html',
+        navigateFallback: './index.html',
         navigateFallbackDenylist: [/^\/api/],
         skipWaiting: true,
         clientsClaim: true
