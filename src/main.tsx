@@ -7,7 +7,7 @@ import './index.css';
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js', {
-      scope: '/arabic-bible/'
+      scope: './'
     }).then(registration => {
       console.log('SW registered:', registration);
     }).catch(error => {
