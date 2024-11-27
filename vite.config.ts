@@ -25,18 +25,18 @@ export default defineConfig({
         scope: './',
         icons: [
           {
-            src: './icons/icon-144x144.png',
+            src: 'icons/icon-144x144.png',
             sizes: '144x144',
             type: 'image/png'
           },
           {
-            src: './icons/icon-192x192.png',
+            src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: './icons/icon-384x384.png',
+            src: 'icons/icon-384x384.png',
             sizes: '384x384',
             type: 'image/png'
           }
