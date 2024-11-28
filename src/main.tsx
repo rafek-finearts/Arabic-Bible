@@ -7,13 +7,10 @@ import './index.css';
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const registration = await navigator.serviceWorker.register(
-        import.meta.env.MODE === 'production' ? './sw.js' : '/dev-sw.js?dev-sw',
-        {
-          type: import.meta.env.MODE === 'production' ? 'classic' : 'module',
-          scope: './'
-        }
-      );
+      const registration = await navigator.serviceWorker.register('./sw.js', {
+        scope: './',
+        type: 'module'
+      });
       console.log('SW registered:', registration);
     } catch (error) {
       console.error('SW registration failed:', error);
