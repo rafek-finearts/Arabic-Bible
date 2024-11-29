@@ -71,12 +71,12 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
 
   return (
     <div className="relative h-full" dir="rtl" {...handlers}>
-      <div ref={headerRef} className="sticky top-0 bg-white dark:bg-gray-800 z-10 py-4 shadow-sm">
+      <div ref={headerRef} className="sticky top-0 bg-gray-300 dark:bg-gray-800 z-10 py-3 shadow-sm">
         <div className="max-w-3xl mx-auto px-8">
           <h1 className="text-2xl font-bold dark:text-white" style={{ fontSize: `${titleSize*.7}px` }}>
             {book}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600" style={{ fontSize: `${titleSize*.4}px` }}>
             {testament} • الإصحاح {chapter}
           </p>
         </div>
@@ -98,7 +98,7 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
                     : ''
                 }`}
               >
-                <span className="text-gray-400 dark:text-gray-500 ml-4 mt-1" style={{ fontSize: `${verseSize * 0.75}px` }}>
+                <span className="text-gray-400 dark:text-gray-500 ml-4 mt-1" style={{ fontSize: `${verseSize * .75}px` }}>
                   {verse.number}
                 </span>
                 <p 

@@ -108,7 +108,7 @@ export const TabsManager: React.FC<TabsManagerProps> = ({
         ))}
       </div>
       
-      <div className="h-12 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex items-center px-4">
+      <div className="h-12 bg-gray-300 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex items-center px-4">
         <div className="flex overflow-x-auto hide-scrollbar" dir="rtl">
           {tabs.map((tab) => (
             <div
