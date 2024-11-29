@@ -73,9 +73,12 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
     <div className="relative h-full" dir="rtl" {...handlers}>
       <div ref={headerRef} className="sticky top-0 bg-white dark:bg-gray-800 z-10 py-4 shadow-sm">
         <div className="max-w-3xl mx-auto px-8">
-          <h1 className="mb-2 dark:text-white" style={{ fontSize: `${titleSize}px` }}>
-            {book} - إصحاح {chapter}
+          <h1 className="text-2xl font-bold dark:text-white" style={{ fontSize: `${titleSize*.7}px` }}>
+            {book}
           </h1>
+          <p className="text-gray-600">
+            {testament} • الإصحاح {chapter}
+          </p>
         </div>
       </div>
       <div 

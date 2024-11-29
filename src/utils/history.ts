@@ -6,8 +6,7 @@ interface HistoryEntry {
   timestamp: number;
   scrollPosition?: number;
   searchOptions?: {
-    matchAllWords: boolean;
-    searchSeparateWords: boolean;
+    searchMode: 'partial' | 'anyWord' | 'allWords';
   };
 }
 
@@ -24,8 +23,7 @@ export const saveToHistory = (tab: {
   content: any;
   scrollPosition?: number;
   searchOptions?: {
-    matchAllWords: boolean;
-    searchSeparateWords: boolean;
+    searchMode: 'partial' | 'anyWord' | 'allWords';
   };
 }) => {
   if (tab.type !== 'verse' && tab.type !== 'search-results') return;
@@ -60,13 +58,11 @@ export const getLastTab = () => {
 export interface FontSettings {
   verseSize: number;
   titleSize: number;
-  globalSize: number;
 }
 
 export const DEFAULT_FONT_SETTINGS: FontSettings = {
   verseSize: 18,
   titleSize: 36,
-  globalSize: 16,
 };
 
 export const saveFontSettings = (settings: FontSettings) => {

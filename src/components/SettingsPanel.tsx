@@ -4,22 +4,18 @@ import { Settings } from 'lucide-react';
 interface SettingsPanelProps {
   verseSize: number;
   titleSize: number;
-  globalSize: number;
   isDarkMode: boolean;
   onVerseSizeChange: (size: number) => void;
   onTitleSizeChange: (size: number) => void;
-  onGlobalSizeChange: (size: number) => void;
   onDarkModeChange: (isDark: boolean) => void;
 }
 
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   verseSize,
   titleSize,
-  globalSize,
   isDarkMode,
   onVerseSizeChange,
   onTitleSizeChange,
-  onGlobalSizeChange,
   onDarkModeChange,
 }) => {
   return (
@@ -38,7 +34,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  حجم خط الآيات ونتائج البحث
+                  حجم خط النصوص
                 </label>
                 <input
                   type="range"
@@ -52,7 +48,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  حجم خط عناوين الإصحاحات
+                  حجم خط العناوين
                 </label>
                 <input
                   type="range"
@@ -61,20 +57,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   step="3"
                   value={titleSize}
                   onChange={(e) => onTitleSizeChange(Number(e.target.value))}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  الحجم العام للخط
-                </label>
-                <input
-                  type="range"
-                  min="12"
-                  max="48"
-                  step="3"
-                  value={globalSize}
-                  onChange={(e) => onGlobalSizeChange(Number(e.target.value))}
                   className="w-full"
                 />
               </div>

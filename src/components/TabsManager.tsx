@@ -4,7 +4,7 @@ import { Tab } from '../types';
 import { VerseDisplay } from './VerseDisplay';
 import { SearchResults } from './SearchResults';
 import { Sidebar } from './Sidebar';
-import { SearchBar } from './SearchBar';
+import { SearchBar, SearchMode } from './SearchBar';
 import { FontSettings } from '../utils/history';
 
 interface TabsManagerProps {
@@ -19,12 +19,11 @@ interface TabsManagerProps {
   onChapterNavigate: (testament: string, book: string, chapter: number, direction: 'prev' | 'next') => void;
   searchProps: {
     value: string;
-    matchAllWords: boolean;
-    searchSeparateWords: boolean;
+    searchMode: SearchMode;
     onChange: (value: string) => void;
     onSearch: (query: string) => void;
-    onMatchAllWordsChange: (checked: boolean) => void;
-    onSearchSeparateWordsChange: (checked: boolean) => void;
+    onSearchModeChange: (mode: SearchMode) => void;
+    verseSize: number;
   };
   sidebarProps: {
     testaments: any[];
@@ -103,7 +102,7 @@ export const TabsManager: React.FC<TabsManagerProps> = ({
               <Sidebar {...sidebarProps} verseSize={fontSettings.verseSize} titleSize={fontSettings.titleSize} />
             )}
             {tab.type === 'search-input' && (
-              <SearchBar {...searchProps} fontSize={fontSettings.globalSize} />
+              <SearchBar {...searchProps} />
             )}
           </div>
         ))}

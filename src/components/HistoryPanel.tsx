@@ -4,9 +4,10 @@ import { getHistory } from '../utils/history';
 
 interface HistoryPanelProps {
   onHistoryItemClick: (entry: any) => void;
+  verseSize: number;
 }
 
-export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onHistoryItemClick }) => {
+export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onHistoryItemClick, verseSize }) => {
   const [isOpen, setIsOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const history = getHistory();
@@ -26,6 +27,19 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onHistoryItemClick }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const getSearchModeText = (mode: string) => {
+    switch (mode) {
+      case 'partial':
+        return 'بحث جزئي';
+      case 'anyWord':
+        return 'بحث عن أي كلمة';
+      case 'allWords':
+        return 'بحث عن جميع الكلمات';
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className="fixed top-4 left-4 z-50" ref={panelRef}>
@@ -47,12 +61,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({ onHistoryItemClick }
                   key={entry.id}
                   onClick={() => handleItemClick(entry)}
                   className="w-full text-right p-2 hover:bg-gray-50 rounded-lg"
+                  style={{ fontSize: `${verseSize * 0.875}px` }}
                 >
                   <div className="font-medium">{entry.title}</div>
                   {entry.type === 'search-results' && entry.searchOptions && (
                     <div className="text-xs text-gray-500 mt-1">
-                      {entry.searchOptions.matchAllWords && 'تطابق جميع الكلمات • '}
-                      {entry.searchOptions.searchSeparateWords && 'كلمات منفصلة'}
+                      {getSearchModeText(entry.searchOptions.searchMode)}
                     </div>
                   )}
                   <div className="text-sm text-gray-500">

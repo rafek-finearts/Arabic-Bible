@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SearchBar } from './components/SearchBar';
+import { SearchBar, SearchMode } from './components/SearchBar';
 import { Sidebar } from './components/Sidebar';
 import { TabsManager } from './components/TabsManager';
 import { HistoryPanel } from './components/HistoryPanel';
@@ -22,8 +22,7 @@ import bibleData from './data/bible.json';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchSeparateWords, setSearchSeparateWords] = useState(false);
-  const [matchAllWords, setMatchAllWords] = useState(false);
+  const [searchMode, setSearchMode] = useState<SearchMode>('partial');
   const [selectedTestament, setSelectedTestament] = useState<string | null>(null);
   const [selectedBook, setSelectedBook] = useState<string | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
@@ -98,7 +97,7 @@ function App() {
     setSearchQuery(query);
     if (!query) return;
 
-    const results = searchBible(query, bibleData, matchAllWords, searchSeparateWords);
+    const results = searchBible(query, bibleData, searchMode);
     
     const searchTab: Tab = {
       id: `search-results-${Date.now()}`,
@@ -109,8 +108,7 @@ function App() {
         searchResults: results,
       },
       searchOptions: {
-        matchAllWords,
-        searchSeparateWords,
+        searchMode,
       },
       isCollapsed: false
     };
@@ -228,8 +226,7 @@ function App() {
       );
     } else if (historyEntry.type === 'search-results') {
       if (historyEntry.searchOptions) {
-        setMatchAllWords(historyEntry.searchOptions.matchAllWords);
-        setSearchSeparateWords(historyEntry.searchOptions.searchSeparateWords);
+        setSearchMode(historyEntry.searchOptions.searchMode);
       }
       setSearchQuery(historyEntry.content.searchQuery);
       handleSearch(historyEntry.content.searchQuery);
@@ -287,16 +284,17 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900" style={{ fontSize: `${fontSettings.globalSize}px` }}>
-      <HistoryPanel onHistoryItemClick={handleHistoryItemClick} />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <HistoryPanel 
+        onHistoryItemClick={handleHistoryItemClick}
+        verseSize={fontSettings.verseSize}
+      />
       <SettingsPanel
         verseSize={fontSettings.verseSize}
         titleSize={fontSettings.titleSize}
-        globalSize={fontSettings.globalSize}
         isDarkMode={isDarkMode}
         onVerseSizeChange={(size) => handleFontSettingChange('verseSize', size)}
         onTitleSizeChange={(size) => handleFontSettingChange('titleSize', size)}
-        onGlobalSizeChange={(size) => handleFontSettingChange('globalSize', size)}
         onDarkModeChange={setIsDarkMode}
       />
       <TabsManager
@@ -311,12 +309,11 @@ function App() {
         onChapterNavigate={handleChapterNavigation}
         searchProps={{
           value: searchQuery,
-          matchAllWords,
-          searchSeparateWords,
+          searchMode,
           onChange: setSearchQuery,
           onSearch: handleSearch,
-          onMatchAllWordsChange: setMatchAllWords,
-          onSearchSeparateWordsChange: setSearchSeparateWords,
+          onSearchModeChange: setSearchMode,
+          verseSize: fontSettings.verseSize,
         }}
         sidebarProps={{
           testaments: bibleData,

@@ -1,4 +1,5 @@
 import { Testament } from '../types';
+import { SearchMode } from '../components/SearchBar';
 
 export const normalizeArabicText = (text: string): string => {
   return text
@@ -12,8 +13,7 @@ export const normalizeArabicText = (text: string): string => {
 export const searchBible = (
   text: string,
   testaments: Testament[],
-  matchAllWords: boolean = false,
-  searchSeparateWords: boolean = false,
+  searchMode: SearchMode,
 ): { testament: string; book: string; chapter: number; verse: number; text: string }[] => {
   const searchTerms = text.trim().split(/\s+/);
   const normalizedSearchTerms = searchTerms.map(term => normalizeArabicText(term));
@@ -28,42 +28,39 @@ export const searchBible = (
           const resultKey = `${testament.name}-${book.name}-${chapter.number}-${verse.number}`;
           
           if (seenResults.has(resultKey)) return;
+
+          let shouldInclude = false;
+
+          switch (searchMode) {
+            case 'partial':
+              // Search for the complete phrase
+              shouldInclude = normalizedVerse.includes(normalizeArabicText(text));
+              break;
+
+            case 'anyWord':
+              // Search for any of the words
+              shouldInclude = normalizedSearchTerms.some(term => 
+                normalizedVerse.includes(term)
+              );
+              break;
+
+            case 'allWords':
+              // Search for all words
+              shouldInclude = normalizedSearchTerms.every(term => 
+                normalizedVerse.includes(term)
+              );
+              break;
+          }
           
-          if (searchSeparateWords) {
-            const matchedTerms = normalizedSearchTerms.filter(term => 
-              normalizedVerse.includes(term)
-            );
-            
-            if (matchAllWords && matchedTerms.length === normalizedSearchTerms.length) {
-              seenResults.add(resultKey);
-              results.push({
-                testament: testament.name,
-                book: book.name,
-                chapter: chapter.number,
-                verse: verse.number,
-                text: verse.text,
-              });
-            } else if (!matchAllWords && matchedTerms.length > 0) {
-              seenResults.add(resultKey);
-              results.push({
-                testament: testament.name,
-                book: book.name,
-                chapter: chapter.number,
-                verse: verse.number,
-                text: verse.text,
-              });
-            }
-          } else {
-            if (normalizedVerse.includes(normalizeArabicText(text))) {
-              seenResults.add(resultKey);
-              results.push({
-                testament: testament.name,
-                book: book.name,
-                chapter: chapter.number,
-                verse: verse.number,
-                text: verse.text,
-              });
-            }
+          if (shouldInclude) {
+            seenResults.add(resultKey);
+            results.push({
+              testament: testament.name,
+              book: book.name,
+              chapter: chapter.number,
+              verse: verse.number,
+              text: verse.text,
+            });
           }
         });
       });
