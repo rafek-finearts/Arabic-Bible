@@ -44,7 +44,7 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
       if (eventData.velocity > 0.3) onNavigate('prev');
     },
     trackMouse: true,
-    delta: 400 // Minimum swipe distance in pixels
+    delta: 200 // Minimum swipe distance in pixels
   });
 
   useEffect(() => {
