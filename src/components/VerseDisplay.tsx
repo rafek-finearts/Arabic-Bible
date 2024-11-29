@@ -37,9 +37,14 @@ export const VerseDisplay: React.FC<VerseDisplayProps> = ({
   const [scrollTimeout, setScrollTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const handlers = useSwipeable({
-    onSwipedRight: () => onNavigate('prev'),
-    onSwipedLeft: () => onNavigate('next'),
-    trackMouse: true
+    onSwipedRight: (eventData) => {
+      if (eventData.velocity > 0.3) onNavigate('next');
+    },
+    onSwipedLeft: (eventData) => {
+      if (eventData.velocity > 0.3) onNavigate('prev');
+    },
+    trackMouse: true,
+    delta: 400 // Minimum swipe distance in pixels
   });
 
   useEffect(() => {
