@@ -61,7 +61,7 @@ function App() {
       type: 'navigation',
       title: 'الكتب',
       content: {},
-      isCollapsed: true
+      isCollapsed: false
     };
 
     const searchTab: Tab = {
@@ -69,7 +69,7 @@ function App() {
       type: 'search-input',
       title: 'البحث',
       content: {},
-      isCollapsed: true
+      isCollapsed: false
     };
 
     setTabs([navigationTab, searchTab, initialTab]);
@@ -116,6 +116,44 @@ function App() {
     setTabs(prev => [...prev, searchTab]);
     setActiveTabId(searchTab.id);
     saveToHistory(searchTab);
+  };
+
+  const handleChapterNavigation = (testament: string, book: string, chapter: number, direction: 'prev' | 'next') => {
+    const adjacentChapter = findAdjacentChapter(testament, book, chapter, direction);
+    if (adjacentChapter) {
+      const verses = bibleData
+        .find(t => t.name === adjacentChapter.testament)
+        ?.books.find(b => b.name === adjacentChapter.book)
+        ?.chapters.find(c => c.number === adjacentChapter.chapter)
+        ?.verses || [];
+
+      if (!verses.length) return;
+
+      // Update the current tab instead of creating a new one
+      setTabs(prev => prev.map(tab => {
+        if (tab.id === activeTabId) {
+          const updatedTab = {
+            ...tab,
+            title: `${adjacentChapter.book} ${adjacentChapter.chapter}`,
+            content: {
+              testament: adjacentChapter.testament,
+              book: adjacentChapter.book,
+              chapter: adjacentChapter.chapter,
+              verses,
+              highlightedVerse: null,
+            },
+          };
+          // Save to history
+          saveToHistory(updatedTab);
+          return updatedTab;
+        }
+        return tab;
+      }));
+
+      setSelectedTestament(adjacentChapter.testament);
+      setSelectedBook(adjacentChapter.book);
+      setSelectedChapter(adjacentChapter.chapter);
+    }
   };
 
   const findAdjacentChapter = (testament: string, book: string, chapter: number, direction: 'prev' | 'next'): { testament: string; book: string; chapter: number } | null => {
@@ -191,29 +229,9 @@ function App() {
       isCollapsed: false
     };
 
-    setTabs(prev => prev.map(tab => ({ ...tab, isCollapsed: true })).concat(verseTab));
+    setTabs(prev => prev.map(tab => ({ ...tab, isCollapsed: false })).concat(verseTab));
     setActiveTabId(verseTab.id);
     saveToHistory(verseTab);
-  };
-
-  const handleChapterNavigation = (testament: string, book: string, chapter: number, direction: 'prev' | 'next') => {
-    const adjacentChapter = findAdjacentChapter(testament, book, chapter, direction);
-    if (adjacentChapter) {
-      handleVerseSelection(
-        adjacentChapter.testament,
-        adjacentChapter.book,
-        adjacentChapter.chapter
-      );
-    }
-  };
-
-  const handleSearchResultClick = (
-    testament: string,
-    book: string,
-    chapter: number,
-    verse: number
-  ) => {
-    handleVerseSelection(testament, book, chapter, verse);
   };
 
   const handleHistoryItemClick = (historyEntry: any) => {
@@ -239,11 +257,6 @@ function App() {
     
     setTabs(prev => {
       const updatedTabs = prev.filter(tab => tab.id !== tabId);
-      if (updatedTabs.length > 2 && updatedTabs.every(tab => tab.isCollapsed)) {
-        return updatedTabs.map((tab, index) => 
-          index === updatedTabs.length - 1 ? { ...tab, isCollapsed: false } : tab
-        );
-      }
       return updatedTabs;
     });
 
@@ -261,18 +274,11 @@ function App() {
   };
 
   const handleTabClick = (tabId: string) => {
-    const clickedTab = tabs.find(tab => tab.id === tabId);
-    if (!clickedTab) return;
-
-    setTabs(prev => prev.map(tab => ({
-      ...tab,
-      isCollapsed: tab.id === tabId ? !tab.isCollapsed : true
-    })));
-    
+    if (activeTabId === tabId) return; // Prevent collapsing when clicking active tab
     setActiveTabId(tabId);
   };
 
-  const handleFontSettingChange = (key: keyof FontSettings, value: number) => {
+  const handleFontSettingChange = (key: keyof FontSettings, value: number | boolean) => {
     const newSettings = { ...fontSettings, [key]: value };
     setFontSettings(newSettings);
     saveFontSettings(newSettings);
@@ -292,9 +298,15 @@ function App() {
       <SettingsPanel
         verseSize={fontSettings.verseSize}
         titleSize={fontSettings.titleSize}
+        contentMargin={fontSettings.contentMargin}
+        verseNumberInside={fontSettings.verseNumberInside}
+        combinedVerseView={fontSettings.combinedVerseView}
         isDarkMode={isDarkMode}
         onVerseSizeChange={(size) => handleFontSettingChange('verseSize', size)}
         onTitleSizeChange={(size) => handleFontSettingChange('titleSize', size)}
+        onContentMarginChange={(margin) => handleFontSettingChange('contentMargin', margin)}
+        onVerseNumberInsideChange={(inside) => handleFontSettingChange('verseNumberInside', inside)}
+        onCombinedVerseViewChange={(combined) => handleFontSettingChange('combinedVerseView', combined)}
         onDarkModeChange={setIsDarkMode}
       />
       <TabsManager
@@ -302,7 +314,7 @@ function App() {
         activeTabId={activeTabId}
         onTabClick={handleTabClick}
         onTabClose={handleTabClose}
-        onResultClick={handleSearchResultClick}
+        onResultClick={handleVerseSelection}
         fontSettings={fontSettings}
         scrollPositions={scrollPositions}
         onScroll={handleScroll}

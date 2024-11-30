@@ -10,11 +10,27 @@ interface HistoryEntry {
   };
 }
 
+export interface FontSettings {
+  verseSize: number;
+  titleSize: number;
+  contentMargin: number;
+  verseNumberInside: boolean;
+  combinedVerseView: boolean;
+}
+
 const HISTORY_KEY = 'bible_app_history';
 const LAST_TAB_KEY = 'bible_app_last_tab';
 const FONT_SETTINGS_KEY = 'bible_app_font_settings';
 const DARK_MODE_KEY = 'bible_app_dark_mode';
 const SCROLL_POSITIONS_KEY = 'bible_app_scroll_positions';
+
+export const DEFAULT_FONT_SETTINGS: FontSettings = {
+  verseSize: 18,
+  titleSize: 36,
+  contentMargin: 8,
+  verseNumberInside: false,
+  combinedVerseView: false,
+};
 
 export const saveToHistory = (tab: { 
   id: string; 
@@ -53,16 +69,6 @@ export const getLastTab = () => {
   } catch {
     return null;
   }
-};
-
-export interface FontSettings {
-  verseSize: number;
-  titleSize: number;
-}
-
-export const DEFAULT_FONT_SETTINGS: FontSettings = {
-  verseSize: 18,
-  titleSize: 36,
 };
 
 export const saveFontSettings = (settings: FontSettings) => {

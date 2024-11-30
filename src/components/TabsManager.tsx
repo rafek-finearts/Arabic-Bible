@@ -52,18 +52,15 @@ export const TabsManager: React.FC<TabsManagerProps> = ({
   if (tabs.length === 0) return null;
 
   const activeTab = tabs.find(tab => tab.id === activeTabId);
-  const isAnyTabExpanded = tabs.some(tab => !tab.isCollapsed);
 
   return (
     <div className="fixed inset-0 flex flex-col justify-end">
-      <div className={`bg-white dark:bg-gray-800 transition-all duration-300 ${
-        isAnyTabExpanded ? 'h-[calc(100%-3rem)]' : 'h-0'
-      } overflow-y-auto`}>
+      <div className="bg-white dark:bg-gray-800 transition-all duration-300 h-[calc(100%-3rem)] overflow-y-auto">
         {tabs.map((tab) => (
           <div
             key={tab.id}
             className={`h-full ${
-              activeTabId === tab.id && !tab.isCollapsed ? 'block' : 'hidden'
+              activeTabId === tab.id ? 'block' : 'hidden'
             }`}
           >
             {tab.type === 'verse' && tab.content.verses && (
@@ -114,14 +111,18 @@ export const TabsManager: React.FC<TabsManagerProps> = ({
             <div
               key={tab.id}
               className={`flex items-center px-4 py-2 space-x-2 space-x-reverse border-r border-gray-200 dark:border-gray-700 ${
-                activeTabId === tab.id && !tab.isCollapsed
+                activeTabId === tab.id
                   ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300'
                   : 'hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-gray-300'
               }`}
               style={{ fontSize: `${fontSettings.titleSize * 0.4}px` }}
             >
               <button
-                onClick={() => onTabClick(tab.id)}
+                onClick={() => {
+                  if (activeTabId !== tab.id) {
+                    onTabClick(tab.id);
+                  }
+                }}
                 className="flex items-center gap-2"
               >
                 <span>{tab.title}</span>

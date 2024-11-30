@@ -66,9 +66,9 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 
   return (
     <div className="h-full flex flex-col" dir="rtl">
-      <div ref={headerRef} className="sticky top-0 bg-white dark:bg-gray-800 z-10 py-6 shadow-sm">
+      <div ref={headerRef} className="sticky top-0 bg-gray-300 dark:bg-gray-800 z-10 py-6 shadow-sm">
         <div className="max-w-3xl mx-auto px-8">
-          <h2 className="text-2xl font-bold dark:text-white" style={{ fontSize: `${fontSize * 1.5}px` }}>
+          <h2 className="text-2xl font-bold dark:text-white" style={{ fontSize: `${fontSize * 1}px` }}>
             نتائج البحث ({results.length})
           </h2>
         </div>
